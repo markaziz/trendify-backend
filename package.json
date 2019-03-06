@@ -1,0 +1,19 @@
+{
+  "name": "spotify-battle-royale",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@koa/cors": "^2.2.3",
+    "axios": "^0.18.0",
+    "btoa": "^1.2.1",
+    "koa": "^2.7.0",
+    "koa-router": "^7.4.0",
+    "querystring": "^0.2.0"
+  }
+}
