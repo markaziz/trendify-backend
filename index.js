@@ -75,14 +75,6 @@ router.get('/discover-weekly', async (ctx) => {
        }
       });
 
-      // const listOfLists = [];
-
-      // for (let index = 0; index < tracks.length; index+=2) {
-      //   const element1 = tracks[index];
-      //   const element2 = tracks[index+1];
-      //   listOfLists.push([element1, element2]);
-      // }
-
       ctx.body = tracks
   })
 });
