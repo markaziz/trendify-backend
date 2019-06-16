@@ -52,6 +52,24 @@ router.get('/callback', async (ctx) => {
   });
 });
 
+router.get('/toptracks', async (ctx) => {
+  const { access_token } = ctx.query;
+  const limit = ctx.query.limit || '10'
+  await axios({
+    url: `https://api.spotify.com/v1/me/top/tracks?limit=${limit}`,
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${access_token}`,
+    },
+  }).then((res) => {
+    ctx.body = res.data.items;
+  })
+  .catch((err) => {
+    ctx.throw(err.response.status, err.message);
+  });
+})
+
 router.get('/discover-weekly', async (ctx) => {
   const { access_token, uri } = ctx.query;
   await axios({
