@@ -47,7 +47,7 @@ router.get('/callback', async (ctx) => {
     
   }).then((res) => {
     console.log(process.env);
-    const uri = `http://${process.env.FRONTEND_URL}`
+    const uri = `${process.env.FRONTEND_URL}`
     ctx.redirect(uri + '?access_token=' + res.data.access_token)
   }).catch(err => {
     throw(err.message)
