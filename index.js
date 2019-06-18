@@ -25,7 +25,7 @@ router.get('/login', async ctx => {
       show_dialog: true,
       client_id: CLIENT_ID,
       scope: 'user-read-private user-read-email user-top-read playlist-read-private',
-      redirect_uri: 'http://localhost:4000/callback'
+      redirect_uri: 'http://localhost:4040/callback'
     }))
 });
 
@@ -36,7 +36,7 @@ router.get('/callback', async (ctx) => {
     data: querystring.stringify({
       grant_type: 'authorization_code',
       code: ctx.query.code,
-      redirect_uri: 'http://localhost:4000/callback',
+      redirect_uri: 'http://localhost:4040/callback',
     }),
     headers: {
       Authorization: 'Basic ' + (new Buffer(
@@ -48,7 +48,7 @@ router.get('/callback', async (ctx) => {
     const uri = 'http://localhost:5000'
     ctx.redirect(uri + '?access_token=' + res.data.access_token)
   }).catch(err => {
-    console.log(err);
+    throw(err.message)
   });
 });
 
@@ -56,7 +56,7 @@ router.get('/toptracks', async (ctx) => {
   const { access_token } = ctx.query;
   const limit = ctx.query.limit || '10'
   await axios({
-    url: `https://api.spotify.com/v1/me/top/tracks?limit=${limit}`,
+    url: `https://api.spotify.com/v1/me/top/tracks?limit=${limit}&time_range=short_term`,
     method: 'get',
     headers: {
       'Content-Type': 'application/json',
@@ -101,5 +101,5 @@ app
   .use(router.routes())
   .use(router.allowedMethods());
 
-app.listen(4000);
-console.log("Listening on port 4000");
+app.listen(4040);
+console.log("Listening on port 4040");
