@@ -1,7 +1,15 @@
 module.exports = {
   apps: [{
     name: 'spotify-backend',
-    script: './index.js'
+    script: './index.js',
+    watch: true,
+    env: {
+      NODE_ENV: "development",
+    },
+    env_production: {
+      NODE_ENV: "production",
+    }
+    
   }],
   deploy: {
     production: {

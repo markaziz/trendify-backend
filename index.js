@@ -2,6 +2,7 @@ const Koa = require('koa');
 const axios = require('axios');
 const Router = require('koa-router');
 const querystring = require('querystring');
+require('dotenv').config()
 
 const cors = require('@koa/cors');
 
@@ -45,7 +46,8 @@ router.get('/callback', async (ctx) => {
     },
     
   }).then((res) => {
-    const uri = 'http://localhost:5000'
+    console.log(process.env);
+    const uri = `http://${process.env.FRONTEND_HOSTNAME}:${process.env.FRONTEND_PORT}`
     ctx.redirect(uri + '?access_token=' + res.data.access_token)
   }).catch(err => {
     throw(err.message)

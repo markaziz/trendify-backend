@@ -16,6 +16,7 @@
     "@koa/cors": "^2.2.3",
     "axios": "^0.18.0",
     "btoa": "^1.2.1",
+    "dotenv": "^8.0.0",
     "koa": "^2.7.0",
     "koa-router": "^7.4.0",
     "querystring": "^0.2.0"
