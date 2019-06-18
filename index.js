@@ -26,7 +26,7 @@ router.get('/login', async ctx => {
       show_dialog: true,
       client_id: CLIENT_ID,
       scope: 'user-read-private user-read-email user-top-read playlist-read-private',
-      redirect_uri: 'http://localhost:4040/callback'
+      redirect_uri: `${process.env.BACKEND_URL}/callback`
     }))
 });
 
@@ -37,7 +37,7 @@ router.get('/callback', async (ctx) => {
     data: querystring.stringify({
       grant_type: 'authorization_code',
       code: ctx.query.code,
-      redirect_uri: 'http://localhost:4040/callback',
+      redirect_uri: `${process.env.BACKEND_URL}/callback`,
     }),
     headers: {
       Authorization: 'Basic ' + (new Buffer(
@@ -47,7 +47,7 @@ router.get('/callback', async (ctx) => {
     
   }).then((res) => {
     console.log(process.env);
-    const uri = `http://${process.env.FRONTEND_HOSTNAME}:${process.env.FRONTEND_PORT}`
+    const uri = `http://${process.env.FRONTEND_URL}`
     ctx.redirect(uri + '?access_token=' + res.data.access_token)
   }).catch(err => {
     throw(err.message)
