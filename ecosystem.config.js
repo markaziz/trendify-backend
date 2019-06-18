@@ -10,7 +10,7 @@ module.exports = {
       key: '~/.ssh/spotify-app-node.pem',
       ref: 'origin/master',
       repo: 'git@github.com:m-aziz/spotify-backend.git',
-      path: '/home/ubuntu/spotify-backend',
+      path: '/var/www/spotify-app/spotify-backend',
       'post-deploy': 'npm install && pm2 startOrRestart ecosystem.config.js'
     }
   }
