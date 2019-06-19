@@ -14,7 +14,7 @@ module.exports = {
   deploy: {
     production: {
       user: 'ubuntu',
-      host: 'ec2-13-239-6-208.ap-southeast-2.compute.amazonaws.com',
+      host: 'ec2-54-252-245-228.ap-southeast-2.compute.amazonaws.com',
       key: '~/.ssh/spotify-app-node.pem',
       ref: 'origin/master',
       repo: 'git@github.com:m-aziz/spotify-backend.git',
