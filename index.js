@@ -46,12 +46,36 @@ router.get('/callback', async (ctx) => {
     },
     
   }).then((res) => {
-    console.log(process.env);
     const uri = `${process.env.FRONTEND_URL}`
     ctx.redirect(uri + '?access_token=' + res.data.access_token)
   }).catch(err => {
     throw(err.message)
   });
+});
+
+router.get('/getRecommendations', async (ctx) => {
+  const { access_token, genre } = ctx.query;
+  const limit = '100'
+  // const res = await axios({
+  //   url: 'https://api.spotify.com/v1/recommendations/available-genre-seeds',
+  //   method: 'get',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     'Authorization': `Bearer ${access_token}`,
+  //   },
+  // })
+
+  // const genres = res.data.genres;
+  // console.log(genres[genre || 0]);
+  const recommendationsRes = await axios({
+    url: `https://api.spotify.com/v1/recommendations?limit=${limit}&seed_genres=${genre}&min_popularity=0&max_popularity=100`,
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${access_token}`,
+    },
+  });
+  ctx.body = recommendationsRes.data.tracks
 });
 
 router.get('/toptracks', async (ctx) => {
@@ -98,6 +122,7 @@ router.get('/discover-weekly', async (ctx) => {
       ctx.body = tracks
   })
 });
+
 
 app
   .use(router.routes())
