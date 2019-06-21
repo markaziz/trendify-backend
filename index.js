@@ -54,7 +54,7 @@ router.get('/callback', async (ctx) => {
 });
 
 router.get('/getRecommendations', async (ctx) => {
-  const { access_token, genre } = ctx.query;
+  const { access_token, genres } = ctx.query;
   const limit = '100'
   // const res = await axios({
   //   url: 'https://api.spotify.com/v1/recommendations/available-genre-seeds',
@@ -68,7 +68,7 @@ router.get('/getRecommendations', async (ctx) => {
   // const genres = res.data.genres;
   // console.log(genres[genre || 0]);
   const recommendationsRes = await axios({
-    url: `https://api.spotify.com/v1/recommendations?limit=${limit}&seed_genres=${genre}&min_popularity=0&max_popularity=100`,
+    url: `https://api.spotify.com/v1/recommendations?limit=${limit}&seed_genres=${genres}&min_popularity=0&max_popularity=100`,
     method: 'get',
     headers: {
       'Content-Type': 'application/json',
