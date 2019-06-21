@@ -19,6 +19,7 @@ module.exports = {
       ref: 'origin/master',
       repo: 'git@github.com:m-aziz/spotify-backend.git',
       path: '/home/ubuntu/spotify-backend',
+      "pre-deploy": "cd /home/ubuntu/spotify-backend && git pull",
       'post-deploy': 'npm install && pm2 startOrRestart ecosystem.config.js'
     }
   }
