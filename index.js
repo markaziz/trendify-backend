@@ -4,7 +4,7 @@ const Router = require('koa-router');
 const querystring = require('querystring');
 require('dotenv').config()
 
-const cors = require('@koa/cors');
+const cors = require('koa-cors');
 
 const app = new Koa();
 app.use(cors());
@@ -19,7 +19,7 @@ router.get('/', async ctx => {
   ctx.redirect('/login');
 });
 
-router.get('/login', async ctx => {
+router.get('/login', async (ctx) => {
   ctx.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
@@ -29,6 +29,26 @@ router.get('/login', async ctx => {
       redirect_uri: `${process.env.BACKEND_URL}/callback`
     }))
 });
+
+router.get('/getToken', async (ctx) => {
+  await axios({
+    url: 'https://accounts.spotify.com/api/token',
+    method: 'post',
+    params: {
+      grant_type: 'client_credentials'
+    },
+    headers: {
+      Authorization: 'Basic ' + (new Buffer(
+        CLIENT_ID + ':' + CLIENT_PASS
+      ).toString('base64')),
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  }).then((res) => {
+    ctx.body = res.data;
+  }).catch(err => {
+    throw(err.message)
+  });
+})
 
 router.get('/callback', async (ctx) => {
   await axios({
@@ -44,9 +64,9 @@ router.get('/callback', async (ctx) => {
         CLIENT_ID + ':' + CLIENT_PASS
       ).toString('base64')),
     },
-    
   }).then((res) => {
     const uri = `${process.env.FRONTEND_URL}`
+    ctx.state.accessToken = res.data.access_token;
     ctx.redirect(uri + '?access_token=' + res.data.access_token)
   }).catch(err => {
     throw(err.message)
@@ -56,17 +76,6 @@ router.get('/callback', async (ctx) => {
 router.get('/getRecommendations', async (ctx) => {
   const { access_token, genres } = ctx.query;
   const limit = '100'
-  // const res = await axios({
-  //   url: 'https://api.spotify.com/v1/recommendations/available-genre-seeds',
-  //   method: 'get',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //     'Authorization': `Bearer ${access_token}`,
-  //   },
-  // })
-
-  // const genres = res.data.genres;
-  // console.log(genres[genre || 0]);
   const recommendationsRes = await axios({
     url: `https://api.spotify.com/v1/recommendations?limit=${limit}&seed_genres=${genres}&min_popularity=0&max_popularity=100`,
     method: 'get',
