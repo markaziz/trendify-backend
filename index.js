@@ -25,7 +25,7 @@ router.get('/login', async (ctx) => {
       response_type: 'code',
       show_dialog: true,
       client_id: CLIENT_ID,
-      scope: 'user-read-private user-read-email user-top-read playlist-read-private',
+      scope: 'user-library-read',
       redirect_uri: `${process.env.BACKEND_URL}/callback`
     }))
 });
@@ -67,7 +67,7 @@ router.get('/callback', async (ctx) => {
   }).then((res) => {
     const uri = `${process.env.FRONTEND_URL}`
     ctx.state.accessToken = res.data.access_token;
-    ctx.redirect(uri + '?access_token=' + res.data.access_token)
+    ctx.redirect(uri + '/token/?access_token=' + res.data.access_token)
   }).catch(err => {
     throw(err.message)
   });
@@ -99,6 +99,47 @@ router.get('/toptracks', async (ctx) => {
     },
   }).then((res) => {
     ctx.body = res.data.items;
+  })
+  .catch((err) => {
+    ctx.throw(err.response.status, err.message);
+  });
+})
+
+router.get('/mySongs', async (ctx) => {
+  const { access_token } = ctx.query;
+  const limit = ctx.query.limit || '10'
+  let offset;
+  let total;
+  await axios({
+    url: `https://api.spotify.com/v1/me/tracks`,
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${access_token}`,
+    },
+  }).then((res) => {
+    total = res.data.total
+    const min = Math.ceil(0);
+    const max = Math.floor(total);
+    const randNum = Math.floor(Math.random() * (max - min + 1)) + min;
+
+    offset = (randNum + total) % total;
+  })
+  .catch((err) => {
+    ctx.throw(err.response.status, err.message);
+  });
+
+
+
+  await axios({
+    url: `https://api.spotify.com/v1/me/tracks?limit=${limit}&offset=${offset}`,
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${access_token}`,
+    },
+  }).then((res) => {
+    ctx.body = res.data.items.map(t => t.track);;
   })
   .catch((err) => {
     ctx.throw(err.response.status, err.message);
