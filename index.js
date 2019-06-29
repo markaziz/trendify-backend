@@ -46,7 +46,7 @@ router.get('/getToken', async (ctx) => {
   }).then((res) => {
     ctx.body = res.data;
   }).catch(err => {
-    throw(err.message)
+    ctx.throw(err.response.status, err.message);
   });
 })
 
@@ -69,7 +69,7 @@ router.get('/callback', async (ctx) => {
     ctx.state.accessToken = res.data.access_token;
     ctx.redirect(uri + '/token/?access_token=' + res.data.access_token)
   }).catch(err => {
-    throw(err.message)
+    ctx.throw(err.response.status, err.message);
   });
 });
 
@@ -83,6 +83,9 @@ router.get('/getRecommendations', async (ctx) => {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${access_token}`,
     },
+  })
+  .catch(err => {
+    ctx.throw(err.response.status, err.message);
   });
   ctx.body = recommendationsRes.data.tracks
 });
