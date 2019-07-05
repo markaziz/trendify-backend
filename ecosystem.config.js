@@ -14,7 +14,7 @@ module.exports = {
   deploy: {
     production: {
       user: 'ubuntu',
-      host: 'trendifymusic.tk',
+      host: 'trendifymusic.com',
       key: '~/.ssh/spotify-app-node.pem',
       ref: 'origin/master',
       repo: 'git@github.com:m-aziz/spotify-backend.git',
