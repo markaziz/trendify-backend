@@ -123,7 +123,7 @@ router.get('/mySongs', async (ctx) => {
   }).then((res) => {
     total = res.data.total
     const min = Math.ceil(0);
-    const max = Math.floor(total);
+    const max = Math.floor(total - limit);
     const randNum = Math.floor(Math.random() * (max - min + 1)) + min;
 
     offset = (randNum + total) % total;
