@@ -12,8 +12,8 @@ app.use(cors());
 
 const router = new Router();
 
-const CLIENT_ID = '95296ff8417549b5b259972a5c39abda';
-const CLIENT_PASS = 'b2898d0cc6c4480dabc614143101d346';
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_PASS = process.env.CLIENT_PASS;
 
 router.get('/', async ctx => {
   ctx.redirect('/login');
